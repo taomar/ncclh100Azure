@@ -16,7 +16,8 @@ services:
     nodes: all
 
 environment_variables:
-  NCCL_IB_HCA: 'mlx5_ib0:1,mlx5_ib1:1,mlx5_ib2:1,mlx5_ib3:1,mlx5_ib4:1,mlx5_ib5:1,mlx5_ib6:1,mlx5_ib7:1'
+  NCCL_IB_HCA: >-
+    mlx5_ib0:1,mlx5_ib1:1,mlx5_ib2:1,mlx5_ib3:1,mlx5_ib4:1,mlx5_ib5:1,mlx5_ib6:1,mlx5_ib7:1
   GID_INDEX: '1'
   NCCL_CUMEM_ENABLE: '0'
   CUDA_DEVICE_MAX_CONNECTIONS: '1'
