@@ -1,0 +1,39 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
+
+# This runs a couple of tests on a gpu node.
+# It helps diagnosis of health of perf issues.
+
+type: command
+
+code: src
+command: mkdir -p /opt/microsoft && cp -f ./ndv5-topo.xml /opt/microsoft/ndv5-topo.xml && /bin/bash ./gpu_perf_h100.sh
+
+# to iterate quickly on your environment design, use inline
+environment: azureml:NCCLH100coreweave:13
+services:
+  my_jupyterlab:
+    type: jupyter_lab
+    nodes: all
+
+environment_variables:
+  NCCL_IB_HCA: 'mlx5_ib0:1,mlx5_ib1:1,mlx5_ib2:1,mlx5_ib3:1,mlx5_ib4:1,mlx5_ib5:1,mlx5_ib6:1,mlx5_ib7:1'
+  GID_INDEX: '1'
+  NCCL_CUMEM_ENABLE: '0'
+  CUDA_DEVICE_MAX_CONNECTIONS: '1'
+  NCCL_NCHANNELS_PER_NET_PEER: '1'
+  NVTE_BIAS_GELU_NVFUSION: '0'
+  HYDRA_FULL_ERROR: '1'
+  NCCL_IB_TIMEOUT: '22'
+ 
+compute: azureml:H100-clusterv2
+
+distribution:
+  type: mpi
+  process_count_per_instance: 8 # NOTE: set equal to number of gpus on the node
+
+resources:
+  instance_count: 24  # NOTE: to use multiple nodes
+
+experiment_name: NcclTestH100
+display_name: NcclTestH100
+description: Runs NCCL-tests on H100 nodes.

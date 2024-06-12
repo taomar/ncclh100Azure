@@ -1,0 +1,27 @@
+## environment
+
+FROM ghcr.io/coreweave/nccl-tests:12.4.1-cudnn-devel-ubuntu20.04-nccl2.21.5-1-85f9143
+RUN apt-get update && apt-get install -y --no-install-recommends openssh-server 
+RUN apt install  -y  python3-pip  
+RUN pip install azureml-core
+RUN pip install azure-storage-blob azure-identity
+RUN apt-get install iproute2 -y
+RUN pip install azureml-mlflow azure-cli
+RUN apt-get update && \
+    apt-get install -y software-properties-common
+RUN add-apt-repository ppa:deadsnakes/ppa
+
+# Once the repository is enabled, install Python 3.11
+RUN apt-get update && \
+    apt-get install -y \
+    python3.11 \
+    python3.11-distutils \
+    python3-pip
+
+
+# Set the Python 3.11 binary as the default python3 binary
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1
+
+# Set the Python3.11 binary as the default python binary
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.11 1
+
